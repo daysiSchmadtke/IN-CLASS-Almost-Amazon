@@ -5,31 +5,22 @@ const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const ESLintPlugin = require('eslint-webpack-plugin');
 
 const path = require('path');
-const dotenv = require('dotenv').config({path: path.resolve(__dirname, '.env')});
+const dotenv = require('dotenv').config({path: __dirname + '/.env'});
 
 module.exports = {
-  entry: './src/index.js', // Updated entry point
-  output: {
-    path: path.resolve(__dirname, 'public'), // Output directory
-    filename: 'main.js',
-  },
-  mode: 'production',
-  stats: {
-    children: true,
-    stats: 'errors-warnings',
-  },
+  entry: './public/main.js',
   plugins: [
     new HtmlWebPackPlugin({
       hash: true,
-      template: "./src/index.html", // Updated template path
-      filename: "index.html"
+      template: "./public/index.html",
+      filename: "./index.html"
     }),
     new MiniCssExtractPlugin({
       filename: "[name].css",
       chunkFilename: "[id].css"
     }),
     new webpack.DefinePlugin( {
-      'process.env': JSON.stringify(process.env),
+      'process.env': JSON.stringify(process.env || dotenv.parsed),
     }),
     new ESLintPlugin()
   ],
@@ -39,20 +30,13 @@ module.exports = {
         test: /\.scss$/,
         use: [
           MiniCssExtractPlugin.loader,
-          'css-loader',
-          'sass-loader'
+          { loader: 'css-loader', options: { sourceMap: true, importLoaders: 1 } },
+          { loader: 'sass-loader', options: { sourceMap: true } },
         ],
       },
       {
         test: /\.css$/i,
-        use: [MiniCssExtractPlugin.loader, 'css-loader'],
-      },
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-        },
+        use: ["style-loader", "css-loader"],
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/,
@@ -78,6 +62,7 @@ module.exports = {
       new CssMinimizerPlugin()
     ]
   },
+  // Opens browser on run of npm start 
   devServer: {
     open: true
   }
