@@ -9,6 +9,7 @@ import { showAuthors } from '../pages/authors';
 import { showBooks } from '../pages/books';
 import viewAuthor from '../pages/viewAuthor';
 import viewBook from '../pages/viewBook';
+// import search from '../utils/search';
 
 /* eslint-disable no-alert */
 const domEvents = () => {
@@ -53,6 +54,8 @@ const domEvents = () => {
     if (e.target.id.includes('add-author-btn')) {
       addAuthorForm();
     }
+
+    // if (e.target.id.includes('#search').addEventListener('keyup', search));
 
     if (e.target.id.includes('edit-author-btn')) {
       const [, firebaseKey] = e.target.id.split('--');

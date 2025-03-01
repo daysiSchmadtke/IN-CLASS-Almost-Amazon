@@ -9,61 +9,6 @@
 <body>
   <div id="app"></div>
   <script>
-document.querySelector('#search').addEventListener('keyup', (e) => {
-  const searchValue = e.target.value.toLowerCase();
-  console.warn(searchValue);
-  if (e.keyCode === 13) {
-    searchBooksAPI(searchValue).then((books) => {
-      displayBooks(books);
-      if (books.length === 0) {
-        document.querySelector('#store').innerHTML = '<p>No books found</p>';
-      }
-    });
-    e.target.value = '';
-  }
-});
-
-// Function to fetch books from the API based on the search query
-const searchBooksAPI = (query) => {
-  return fetch(`${endpoint}/books.json?search=${query}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    }
-  })
-    .then((res) => res.json())
-    .then((data) => Object.values(data))
-    .catch((error) => {
-      console.error('Error fetching books:', error);
-      return [];
-    });
-};
-
-// Function to display books on the page
-const displayBooks = (books) => {
-  const resultsContainer = document.querySelector('#store');
-  resultsContainer.innerHTML = '';
-
-  if (books.length === 0) {
-    resultsContainer.innerHTML = '<p>No books found</p>';
-    return;
-  }
-
-  books.forEach((book) => {
-    const bookElement = document.createElement('div');
-    bookElement.classList.add('book-result');
-    bookElement.innerHTML = `
-      <div class="card" style="width: 18rem;">
-        <div class="card-body">
-          <h5 class="card-title">${book.title}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">${book.author}</h6>
-        </div>
-      </div>
-    `;
-    resultsContainer.appendChild(bookElement);
-  });
-};
-
   </script>
 </body>
 </html>
