@@ -21,4 +21,11 @@ const getBookDetails = (firebaseKey) => new Promise((resolve, reject) => {
   // GET AUTHOR
   // Create an object that has book data and an object named authorObject
 });
-export { deleteAuthorBooksRelationship, getBookDetails };
+
+const getAuthorDetails = async (firebaseKey) => {
+  const author = await getSingleAuthor(firebaseKey);
+  const books = await getAuthorBooks(author.firebaseKey);
+
+  return { ...author, books };
+};
+export { deleteAuthorBooksRelationship, getBookDetails, getAuthorDetails };
