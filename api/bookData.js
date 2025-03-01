@@ -4,7 +4,7 @@ const endpoint = client.databaseURL;
 
 // TODO: GET BOOKS
 const getBooks = () => new Promise((resolve, reject) => {
-  fetch(endpoint, {
+  fetch(`${endpoint}/books.json`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
