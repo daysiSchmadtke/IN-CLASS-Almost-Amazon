@@ -19,7 +19,7 @@ const showAuthors = (array) => {
     <div class="card" style="width: 18rem;">
       <div class="card-body">
         <h5 class="card-title">${item.first_name} ${item.last_name}</h5>
-        <h6 class="card-subtitle mb-2 text-muted">${item.email}</h6>
+        <h6 class="card-subtitle mb-2 text-muted">${item.email}</h6>     
         <hr>
         <i class="btn btn-success fas fa-eye" id="view-author-btn--${item.firebaseKey}"></i>
         <i class="fas fa-edit btn btn-info" id="update-author--${item.firebaseKey}"></i>
@@ -31,4 +31,31 @@ const showAuthors = (array) => {
   renderToDOM('#store', domString);
 };
 
-export { showAuthors, emptyAuthors };
+const showFavAuthors = (array) => {
+  clearDom();
+
+  const btnString = '<button class="btn btn-success btn-lg mb-4" id="add-author-btn">Add An Author</button>';
+  renderToDOM('#add-button', btnString);
+
+  let domString = '';
+  array.forEach((item) => {
+    if (item.favorite === true) {
+      domString += `
+        <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">${item.first_name} ${item.last_name}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">${item.email}</h6>     
+            <hr>
+            <i class="btn btn-success fas fa-eye" id="view-author-btn--${item.firebaseKey}"></i>
+            <i class="fas fa-edit btn btn-info" id="update-author--${item.firebaseKey}"></i>
+            <i class="btn btn-danger fas fa-trash-alt" id="delete-author-btn--${item.firebaseKey}"></i>
+          </div>
+        </div>
+      `;
+    }
+  });
+
+  renderToDOM('#store', domString);
+};
+
+export { showAuthors, emptyAuthors, showFavAuthors };
