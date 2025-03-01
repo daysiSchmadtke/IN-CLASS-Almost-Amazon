@@ -8,10 +8,10 @@ const getBooks = () => new Promise((resolve, reject) => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-    }
+    },
   })
     .then((response) => response.json())
-    .then((books) => resolve(books))
+    .then((data) => resolve(Object.values(data)))
     .catch(reject);
 });
 
