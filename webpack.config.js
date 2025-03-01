@@ -8,12 +8,21 @@ const path = require('path');
 const dotenv = require('dotenv').config({path: path.resolve(__dirname, '.env')});
 
 module.exports = {
-  entry: './public/main.js',
+  entry: './src/index.js', // Updated entry point
+  output: {
+    path: path.resolve(__dirname, 'public'), // Output directory
+    filename: 'main.js',
+  },
+  mode: 'production',
+  stats: {
+    children: true,
+    stats: 'errors-warnings',
+  },
   plugins: [
     new HtmlWebPackPlugin({
       hash: true,
-      template: "./public/index.html",
-      filename: "./index.html"
+      template: "./src/index.html", // Updated template path
+      filename: "index.html"
     }),
     new MiniCssExtractPlugin({
       filename: "[name].css",
@@ -30,13 +39,20 @@ module.exports = {
         test: /\.scss$/,
         use: [
           MiniCssExtractPlugin.loader,
-          { loader: 'css-loader', options: { sourceMap: true, importLoaders: 1 } },
-          { loader: 'sass-loader', options: { sourceMap: true } },
+          'css-loader',
+          'sass-loader'
         ],
       },
       {
         test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+      },
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+        },
       },
       {
         test: /\.(png|svg|jpg|jpeg|gif)$/,
@@ -62,7 +78,6 @@ module.exports = {
       new CssMinimizerPlugin()
     ]
   },
-  // Opens browser on run of npm start 
   devServer: {
     open: true
   }
