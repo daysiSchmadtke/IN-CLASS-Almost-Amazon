@@ -79,7 +79,15 @@ const updateAuthor = (payload) => new Promise((resolve, reject) => {
 });
 
 // TODO: GET A SINGLE AUTHOR'S BOOKS
-const getAuthorBooks = () => {};
+const getAuthorBooks = () => new Promise((resolve, reject) => {
+  // Simulating a fetch operation
+  const booksArray = []; // Fetch the author's books from your data source
+  if (booksArray) {
+    resolve(booksArray);
+  } else {
+    reject(new Error('Failed to fetch books.'));
+  }
+});
 
 export {
   getAuthors,
