@@ -4,7 +4,7 @@ const endpoint = client.databaseURL;
 
 // FIXME:  GET ALL AUTHORS
 const getAuthors = (uid) => new Promise((resolve, reject) => {
-  fetch(`${endpoint}/authors.?orderBy="uid"&equalTo="${uid}"`, {
+  fetch(`${endpoint}/authors.json?orderBy="uid"&equalTo="${uid}"`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -13,7 +13,7 @@ const getAuthors = (uid) => new Promise((resolve, reject) => {
     .then((response) => response.json())
     .then((data) => {
       if (data) {
-        (Object.values(data));
+        resolve(Object.values(data)); // Make sure to pass the resolved data
       } else {
         resolve([]);
       }
