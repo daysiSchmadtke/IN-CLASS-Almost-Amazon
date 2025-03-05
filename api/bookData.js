@@ -1,3 +1,4 @@
+import firebase from 'firebase/app';
 import client from '../utils/client';
 
 const endpoint = client.databaseURL;
@@ -8,12 +9,15 @@ const getBooks = (uid) => new Promise((resolve, reject) => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-    }
+    },
   })
-    .then((res) => res.json())
+    .then((response) => response.json())
     .then((data) => {
-      const filteredData = Object.values(data).filter((book) => book.uid === uid);
-      resolve(filteredData);
+      if (data) {
+        resolve(Object.values(data));
+      } else {
+        resolve([]);
+      }
     })
     .catch(reject);
 });
@@ -44,8 +48,15 @@ const getSingleBook = (firebaseKey) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 // TODO: CREATE BOOK
-const createBook = (payload, uid) => new Promise((resolve, reject) => {
-  const updatedPayload = { ...payload, uid };
+const createBook = (payload) => new Promise((resolve, reject) => {
+  const user = firebase.auth().currentUser; // Get the currently logged-in user
+
+  if (!user) {
+    reject(new Error('User must be logged in to create a book.'));
+    return;
+  }
+
+  const updatedPayload = { ...payload, uid: user.uid }; // Attach the current user's uid
   fetch(`${endpoint}/books.json`, {
     method: 'POST',
     headers: {
@@ -55,7 +66,7 @@ const createBook = (payload, uid) => new Promise((resolve, reject) => {
   })
     .then((response) => response.json())
     .then((data) => resolve(data))
-    .catch(reject);
+    .catch((error) => reject(new Error('Error creating book: ', error.message)));
 });
 
 // TODO: UPDATE BOOK
