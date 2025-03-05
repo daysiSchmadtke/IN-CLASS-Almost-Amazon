@@ -1,19 +1,24 @@
 import clearDom from '../utils/clearDom';
 import renderToDOM from '../utils/renderToDom';
 
+// Function to show a message when there are no books
 const emptyBooks = () => {
   const domString = '<h1>No Books</h1>';
   renderToDOM('#store', domString);
 };
 
-const showBooks = (array) => {
+// Function to show books associated with the logged-in user's uid
+const showBooks = (array, uid) => {
   clearDom();
 
   const btnString = '<button class="btn btn-success btn-lg mb-4" id="add-book-btn">Add A Book</button>';
   renderToDOM('#add-button', btnString);
 
+  // Filter books to only include those with the specified uid
+  const userBooks = array.filter((book) => book.uid === uid);
+
   let domString = '';
-  array.forEach((item) => {
+  userBooks.forEach((item) => {
     domString += `
       <div class="card">
         <img class="card-img-top" src=${item.image} alt=${item.title} style="height: 400px;">
@@ -27,6 +32,12 @@ const showBooks = (array) => {
         </div>
       </div>`;
   });
+
+  // If there are no books for the user, show a message
+  if (!userBooks.length) {
+    domString = '<h1>No Books</h1>';
+  }
+
   renderToDOM('#store', domString);
 };
 
