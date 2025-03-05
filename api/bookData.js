@@ -8,15 +8,12 @@ const getBooks = (uid) => new Promise((resolve, reject) => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-    },
+    }
   })
-    .then((response) => response.json())
+    .then((res) => res.json())
     .then((data) => {
-      if (data) {
-        resolve(Object.values(data));
-      } else {
-        resolve([]);
-      }
+      const filteredData = Object.values(data).filter((book) => book.uid === uid);
+      resolve(filteredData);
     })
     .catch(reject);
 });
