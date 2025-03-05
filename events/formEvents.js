@@ -44,11 +44,12 @@ const formEvents = () => {
 
     // FIXME: ADD CLICK EVENT FOR SUBMITTING FORM FOR ADDING AN AUTHOR
     if (e.target.id.includes('submit-author')) {
+      const favoriteElement = document.querySelector('#favorite');
       const payload = {
         first_name: document.querySelector('#first_name').value,
         last_name: document.querySelector('#last_name').value,
         email: document.querySelector('#email').value,
-        favorite: document.querySelector('#favorite').checked,
+        favorite: favoriteElement ? favoriteElement.checked : false, // use false as default if element is not present,
       };
 
       createAuthor(payload).then(({ name }) => {

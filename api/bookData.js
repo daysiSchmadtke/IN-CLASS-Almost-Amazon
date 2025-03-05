@@ -3,8 +3,8 @@ import client from '../utils/client';
 const endpoint = client.databaseURL;
 
 // TODO: GET BOOKS
-const getBooks = () => new Promise((resolve, reject) => {
-  fetch(`${endpoint}/books.json`, {
+const getBooks = (uid) => new Promise((resolve, reject) => {
+  fetch(`${endpoint}/books.json?orderBy="uid"&equalTo="${uid}"`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
@@ -47,13 +47,14 @@ const getSingleBook = (firebaseKey) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 // TODO: CREATE BOOK
-const createBook = (payload) => new Promise((resolve, reject) => {
+const createBook = (payload, uid) => new Promise((resolve, reject) => {
+  const updatedPayload = { ...payload, uid };
   fetch(`${endpoint}/books.json`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify(updatedPayload),
   })
     .then((response) => response.json())
     .then((data) => resolve(data))
@@ -74,7 +75,8 @@ const updateBook = (payload) => new Promise((resolve, reject) => {
     .catch(reject);
 });
 // TODO: FILTER BOOKS ON SALE
-const booksOnSale = () => new Promise((resolve, reject) => {
+// TODO: FILTER BOOKS ON SALE
+const booksOnSale = (uid) => new Promise((resolve, reject) => {
   fetch(`${endpoint}/books.json?orderBy="sale"&equalTo=true`, {
     method: 'GET',
     headers: {
@@ -82,9 +84,14 @@ const booksOnSale = () => new Promise((resolve, reject) => {
     }
   })
     .then((res) => res.json())
-    .then((data) => resolve(Object.values(data)))
+    .then((data) => {
+      // Filter books by uid after fetching
+      const filteredData = Object.values(data).filter((book) => book.uid === uid);
+      resolve(filteredData);
+    })
     .catch(reject);
 });
+
 // TODO: STRETCH...SEARCH BOOKS
 
 export {
